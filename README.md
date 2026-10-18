@@ -5,7 +5,7 @@
 <h1 align="center">Daedra</h1>
 
 <p align="center">
-  Self-contained web search MCP server. Rust. 14 unkeyed backends. Mwmbl and Marginalia answer from any IP. Brave HTML may rate-limit. Basic search needs no API keys.<br>
+  Self-contained web search MCP server. Rust. 15 unkeyed backends. Mwmbl and Marginalia answer from any IP. Brave HTML may rate-limit. Basic search needs no API keys.<br>
   Single binary. Relevance-ranked multi-backend search. Zero configuration for basic search.
 </p>
 
@@ -24,10 +24,10 @@ Daedra is a self-contained web search [MCP](https://modelcontextprotocol.io/) se
 Major search engines block datacenter and VPS IP addresses with CAPTCHAs. Daedra solves this with a multi-backend fan-out. All available backends run the query at once, and the results merge by relevance:
 
 ```
-Mwmbl → Brave → Marginalia → Bing RSS → Bing → Google News → Hacker News → Google → Wikipedia → StackOverflow → GitHub → Wiby → DDG Instant → DuckDuckGo HTML
+Mwmbl → Brave → Marginalia → Bing RSS → Bing → Google News → Hacker News → Google → Wikipedia → StackOverflow → GitHub → Wiby → DDG Instant → DuckDuckGo HTML → You.com
 ```
 
-Three backend groups exist. Scraper backends read HTML and sometimes meet a CAPTCHA. Machine-format backends read RSS and JSON feeds that engines publish for integrations. Knowledge backends query Wikipedia, StackOverflow, GitHub, Wiby, and DDG Instant. All fourteen backends need no paid search key.
+Three backend groups exist. Scraper backends read HTML and sometimes meet a CAPTCHA. Machine-format backends read RSS and JSON feeds that engines publish for integrations. Knowledge backends query Wikipedia, StackOverflow, GitHub, Wiby, and DDG Instant. You.com is a keyless general-web index. All fifteen backends need no paid search key.
 
 Unkeyed general coverage depends on where daedra runs. Mwmbl and Marginalia answer from any IP. Brave HTML may rate-limit. The knowledge and machine-format backends (wiki, HN, StackOverflow, GitHub, Bing RSS, Google News) work from any IP.
 
@@ -35,7 +35,7 @@ Per-backend circuit breakers and per-backend rate limits keep the chain stable u
 
 ## Features
 
-- 14 unkeyed search backends with automatic fallback (see the table below)
+- 15 unkeyed search backends with automatic fallback (see the table below)
 - Circuit breaker (`BackendHealth`): opens after repeated failures, with a 30 second cooldown
 - Per-backend rate limits via `governor`, with separate quotas for knowledge and scraper backends
 - Classified retry: the chain retries only transient errors
@@ -69,6 +69,7 @@ cargo install daedra
 | **Wiby** | Indie web search | None | **Always** |
 | **DDG Instant** | Knowledge graph API | None | **Always** |
 | DuckDuckGo | HTML scraping | None | Rarely (blocked since mid-2025) |
+| **You.com** | Keyless Agents API | None | **Always** |
 
 The merge ranks every result by how much of the query it shares. Results that share no query token land after every matched result. When no result matches at all, the search reports this. It does not return unrelated feed noise. Backends that ignore the query cannot outvote backends that found nothing relevant.
 

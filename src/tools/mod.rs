@@ -22,6 +22,7 @@ pub mod soft_block;
 pub mod stackexchange;
 pub mod wiby;
 pub mod wikipedia;
+pub mod youcom;
 
 pub use backend::*;
 #[cfg(feature = "crawlberg")]
