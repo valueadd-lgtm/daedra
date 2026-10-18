@@ -1,6 +1,6 @@
 # daedra
 
-Self-contained web search MCP server. 14 unkeyed backends with automatic fallback. Mwmbl and Marginalia answer from any IP. Brave HTML may rate-limit. No paid search keys.
+Self-contained web search MCP server. 15 unkeyed backends with automatic fallback. Mwmbl and Marginalia answer from any IP. Brave HTML may rate-limit. No paid search keys.
 
 ## Build and test
 

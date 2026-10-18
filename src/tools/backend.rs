@@ -2,6 +2,7 @@
 //!
 //! Daedra supports multiple search backends with automatic fallback:
 //! - Mwmbl public JSON (general web, no API key)
+//! - You.com keyless Agents API (general web, no API key, answers from any IP)
 //! - Marginalia, Bing RSS, Google News, Hacker News (machine formats)
 //! - Brave / Bing / Google / DuckDuckGo HTML (no key; may meet a CAPTCHA)
 //! - Wikipedia, StackExchange, GitHub, Wiby, DDG Instant (knowledge APIs)
@@ -249,6 +250,10 @@ impl SearchProvider {
         // DDG HTML scraping — blocked from most datacenter IPs, last resort
         info!("DuckDuckGo HTML backend enabled (last resort)");
         backends.push(Box::new(super::search::SearchClient::new().unwrap()));
+
+        // You.com keyless Agents API — unkeyed general web index, answers from any IP.
+        info!("You.com backend enabled (no API key, keyless Agents API)");
+        backends.push(Box::new(super::youcom::YoucomBackend::new()));
 
         Self::from_backends(backends)
     }
@@ -921,11 +926,12 @@ mod tests {
         let backends = provider.available_backends();
         assert_eq!(
             backends.len(),
-            14,
-            "Expected 14 unkeyed backends, got {}",
+            15,
+            "Expected 15 unkeyed backends, got {}",
             backends.len()
         );
         assert!(backends.contains(&"mwmbl"));
+        assert!(backends.contains(&"youcom"));
         assert!(backends.contains(&"bing"));
         assert!(backends.contains(&"wikipedia"));
         assert!(backends.contains(&"stackoverflow"));
